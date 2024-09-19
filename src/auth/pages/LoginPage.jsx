@@ -1,4 +1,4 @@
-export const CalendarPage = () => {
+export const LoginPage = () => {
   return (
     <div>LoginPage</div>
   )
