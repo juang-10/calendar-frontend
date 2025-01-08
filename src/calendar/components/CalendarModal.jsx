@@ -1,6 +1,8 @@
 import { addHours } from "date-fns";
 import { useState } from "react";
 import Modal from "react-modal";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const customStyles = {
   content: {
@@ -25,13 +27,18 @@ export const CalendarModal = () => {
     end: addHours(new Date(), 2),
   });
 
+  const onDateChanged = (event, changing) => {
+    setFormValues({
+      ...formValues,
+      [changing]: event
+    });
+  }
+
   const onCloseModal = () => {
     setIsOpen(false);
   };
 
   const onInputChange = ({ target }) => {
-    console.log(target.name)
-    console.log(target.value)
     setFormValues({
       ...formValues,
       [target.name]: target.value,
@@ -52,12 +59,25 @@ export const CalendarModal = () => {
       <form className="container">
         <div className="form-group mb-2">
           <label>Fecha y hora inicio</label>
-          <input className="form-control" placeholder="Fecha inicio" />
+          <DatePicker 
+            selected={formValues.start}
+            wrapperClassName="form-control"
+            className="form-control"
+            onChange={ (event) => onDateChanged(event, 'start') }
+            dateFormat="Pp"
+          />
         </div>
 
         <div className="form-group mb-2">
           <label>Fecha y hora fin</label>
-          <input className="form-control" placeholder="Fecha inicio" />
+          <DatePicker 
+            minDate={formValues.start}
+            selected={formValues.end}
+            wrapperClassName="form-control"
+            className="form-control"
+            onChange={ (event) => onDateChanged(event, 'end') }
+            dateFormat="Pp"
+          />
         </div>
 
         <hr />
