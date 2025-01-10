@@ -1,9 +1,9 @@
-import { addHours, differenceInSeconds } from "date-fns";
-import { useState } from "react";
 import Modal from "react-modal";
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { es } from 'date-fns/locale/es';
+import 'sweetalert2/dist/sweetalert2.min.css';
+import { useCalendarModal } from "../hooks/useCalendarModal";
 
 registerLocale('es', es)
 const customStyles = {
@@ -20,52 +20,16 @@ const customStyles = {
 Modal.setAppElement("#root");
 
 export const CalendarModal = () => {
-  const [isOpen, setIsOpen] = useState(true);
-
-  const [formValues, setFormValues] = useState({
-    title: "Juan",
-    notes: "Gonzalez",
-    start: new Date(),
-    end: addHours(new Date(), 2),
-  });
-
-  const onDateChanged = (event, changing) => {
-    setFormValues({
-      ...formValues,
-      [changing]: event
-    });
-  }
-
-  const onInputChange = ({ target }) => {
-    setFormValues({
-      ...formValues,
-      [target.name]: target.value,
-    });
-  }
-
-  const onCloseModal = () => {
-    setIsOpen(false);
-  };
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-    const difference = differenceInSeconds (formValues.end, formValues.start);
-    if(isNaN(difference) || difference <= 0) { 
-      console.log('Error en fechas');
-      return;
-    }
-
-    if(formValues.title.trim().length <= 0) {
-      console.log('Error en titulo');
-      return;
-    }
-
-    console.log(formValues);
-
-    // TODO
-    // Cerrar modal
-    // Remover errores en pantalla
-  }
+  
+  const {
+    formValues,
+    isOpen,
+    onCloseModal,
+    onDateChanged,
+    onInputChange,
+    onSubmit,
+    titleClass,
+  } = useCalendarModal();
 
 
   return (
@@ -114,7 +78,7 @@ export const CalendarModal = () => {
           <label>Titulo y notas</label>
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${ titleClass }`}
             placeholder="Título del evento"
             name="title"
             autoComplete="off"
