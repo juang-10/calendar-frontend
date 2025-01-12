@@ -1,9 +1,10 @@
 import { addHours, differenceInSeconds } from "date-fns";
 import { useMemo, useState } from "react";
 import Swal from "sweetalert2";
+import { useUiStore } from "../../hooks";
 
 export const useCalendarModal = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const { closeDateModal } = useUiStore()
   const [formSubmitted, setFormSubmitted] = useState(false)
 
   const [formValues, setFormValues] = useState({
@@ -35,7 +36,7 @@ export const useCalendarModal = () => {
   }
 
   const onCloseModal = () => {
-    setIsOpen(false);
+    closeDateModal()
   };
 
   const onSubmit = (event) => {
@@ -55,7 +56,6 @@ export const useCalendarModal = () => {
 
   return {
     formValues,
-    isOpen,
     onCloseModal,
     onDateChanged,
     onInputChange,
