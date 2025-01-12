@@ -4,6 +4,7 @@ import { CalendarEvent, CalendarModal, Navbar } from "../"
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { localizer, getMessagesEs } from "../../helpers"
 import { useState } from "react"
+import { useUiStore } from "../../hooks"
 
 const events = [{
   title: 'Cumpleaños del Jefe',
@@ -20,9 +21,10 @@ const events = [{
 
 export const CalendarPage = () => {
 
+  const { openDateModal } = useUiStore()
   const [ lastView, setLastView ] = useState( localStorage.getItem('lastView') || 'week' )
 
-  const eventStyleGetter = (event, start, end, isSelected) => {
+  const eventStyleGetter = () => {
     const style = {
       backgroundColor: '#367CF7',
       borderRadius: '0px',
@@ -35,8 +37,8 @@ export const CalendarPage = () => {
     }
   }
 
-  const onDoubleClick = (e) => {
-    console.log({ doubleClick: e})
+  const onDoubleClick = () => {
+    openDateModal()
   }
 
   const onSelect = (e) => {
