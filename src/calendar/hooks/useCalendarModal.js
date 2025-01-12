@@ -1,10 +1,12 @@
 import { addHours, differenceInSeconds } from "date-fns";
 import { useMemo, useState } from "react";
 import Swal from "sweetalert2";
-import { useUiStore } from "../../hooks";
+import { useCalendarStore, useUiStore } from "../../hooks";
+import { useEffect } from "react";
 
 export const useCalendarModal = () => {
   const { closeDateModal } = useUiStore()
+  const { activeEvent } = useCalendarStore()
   const [formSubmitted, setFormSubmitted] = useState(false)
 
   const [formValues, setFormValues] = useState({
@@ -20,6 +22,15 @@ export const useCalendarModal = () => {
     return (formValues.title.length > 0) ? '' : 'is-invalid';
 
   }, [formValues.title, formSubmitted]);
+
+  useEffect(() => {
+
+    if( activeEvent !== null ) {
+      setFormValues({...activeEvent});
+    }
+    
+  }, [activeEvent])
+  
 
   const onDateChanged = (event, changing) => {
     setFormValues({
