@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 export const useCalendarModal = () => {
   const { closeDateModal } = useUiStore()
-  const { activeEvent } = useCalendarStore()
+  const { activeEvent, startSavingEvent } = useCalendarStore()
   const [formSubmitted, setFormSubmitted] = useState(false)
 
   const [formValues, setFormValues] = useState({
@@ -50,7 +50,7 @@ export const useCalendarModal = () => {
     closeDateModal()
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = async(event) => {
     event.preventDefault();
     setFormSubmitted(true);
     const difference = differenceInSeconds(formValues.end, formValues.start);
@@ -63,6 +63,9 @@ export const useCalendarModal = () => {
       console.log('Error en titulo');
       return;
     }
+    await startSavingEvent(formValues);
+    closeDateModal();
+    setFormSubmitted(false);
   }
 
   return {
